@@ -1,48 +1,58 @@
-package loop;
+package looping;
 
 import java.io.*;
 import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
 
 public class Solution {
+  private static InputReader in;
+  private static PrintWriter out;
 
-    static void separateNumbers(String s) {
-        int f=0;
-        long w=0l;
-        for(int x=0;x<s.length()/2;x++)
-        {
-            String a=s.substring(0,x+1);
-            long q=Long.parseLong(a);
-            w=q;
-            a=""+q;
-            while(a.length()<s.length())
-            {
-                q++;
-                a=a+q;
-            }
-            if(a.equals(s))
-            {
-                System.out.println("YES "+w);
-                f++;
-                break;
-            }
-        }
-        if(f==0)
-        {
-            System.out.println("NO");
-        }
-        // Complete this function
+  public static void main(String[] args) throws IOException {
+    in = new InputReader(System.in);
+    out = new PrintWriter(System.out, true);
+
+    int n = in.nextInt();
+    int[] arr = new int[n];
+    for (int i = 0; i < n; i++) {
+      arr[i] = in.nextInt();
+    }
+    int[] dp = new int[n];
+    for (int i = 1; i < n; i++) {
+      if (arr[i] == 1) dp[i] = 1 << 29;
+      dp[i] = 1 << 29;
+      if (i >= 1 && arr[i-1] == 0) dp[i] = Math.min(dp[i], dp[i-1]+1);
+      if (i >= 2 && arr[i-2] == 0) dp[i] = Math.min(dp[i], dp[i-2]+1);
+    }
+    out.println(dp[n-1]);
+    
+    out.close();
+    System.exit(0);
+  }
+
+  static class InputReader {
+    public BufferedReader reader;
+    public StringTokenizer tokenizer;
+
+    public InputReader(InputStream stream) {
+      reader = new BufferedReader(new InputStreamReader(stream), 32768);
+      tokenizer = null;
     }
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int q = in.nextInt();
-        for(int a0 = 0; a0 < q; a0++){
-            String s = in.next();
-            separateNumbers(s);
+    public String next() {
+      while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+        try {
+          tokenizer = new StringTokenizer(reader.readLine());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
         }
-        in.close();
+      }
+      return tokenizer.nextToken();
     }
+
+    public int nextInt() {
+      return Integer.parseInt(next());
+    }
+  }
+
+
 }
